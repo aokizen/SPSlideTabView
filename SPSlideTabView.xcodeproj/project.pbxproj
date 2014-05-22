@@ -18,6 +18,7 @@
 		6F44E7DB192E55D40038F654 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F44E7D9192E55D40038F654 /* ExampleViewController.m */; };
 		6F44E7DC192E55D40038F654 /* ExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F44E7DA192E55D40038F654 /* ExampleViewController.xib */; };
 		6F44E7DF192E55F90038F654 /* SPSlideTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F44E7DE192E55F90038F654 /* SPSlideTabView.m */; };
+		6F44E7E2192E5B780038F654 /* SPSlideTabButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F44E7E1192E5B780038F654 /* SPSlideTabButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,8 @@
 		6F44E7DA192E55D40038F654 /* ExampleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExampleViewController.xib; sourceTree = "<group>"; };
 		6F44E7DD192E55F90038F654 /* SPSlideTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSlideTabView.h; sourceTree = "<group>"; };
 		6F44E7DE192E55F90038F654 /* SPSlideTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSlideTabView.m; sourceTree = "<group>"; };
+		6F44E7E0192E5B780038F654 /* SPSlideTabButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSlideTabButton.h; sourceTree = "<group>"; };
+		6F44E7E1192E5B780038F654 /* SPSlideTabButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSlideTabButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 		6F44E77B192E4A1F0038F654 /* SPSlideTabView */ = {
 			isa = PBXGroup;
 			children = (
+				6F44E7E0192E5B780038F654 /* SPSlideTabButton.h */,
+				6F44E7E1192E5B780038F654 /* SPSlideTabButton.m */,
 				6F44E7D5192E543E0038F654 /* SPSlideTabBar.h */,
 				6F44E7D6192E543E0038F654 /* SPSlideTabBar.m */,
 				6F44E7DD192E55F90038F654 /* SPSlideTabView.h */,
@@ -190,6 +195,7 @@
 				6F44E7BA192E4C8D0038F654 /* AppDelegate.m in Sources */,
 				6F44E7DB192E55D40038F654 /* ExampleViewController.m in Sources */,
 				6F44E7B6192E4C8D0038F654 /* main.m in Sources */,
+				6F44E7E2192E5B780038F654 /* SPSlideTabButton.m in Sources */,
 				6F44E7D7192E543E0038F654 /* SPSlideTabBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

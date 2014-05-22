@@ -8,7 +8,11 @@
 
 #import "ExampleViewController.h"
 
+#import "SPSlideTabView.h"
+
 @interface ExampleViewController ()
+
+@property (strong, nonatomic) IBOutlet SPSlideTabView *slideTabView;
 
 @end
 
@@ -26,13 +30,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    
+    [self.slideTabView addPageForTitle:@"One"];
+    [self.slideTabView addPageForTitle:@"Two"];
+    [self.slideTabView addPageForTitle:@"Three"];
+    [self.slideTabView addPageForTitle:@"This is a long title"];
+    
+    [self.slideTabView setSelectedPageIndex:2];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end
