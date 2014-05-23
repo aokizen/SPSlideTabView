@@ -68,6 +68,12 @@
     
 }
 
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    
+    [self reset];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -94,6 +100,8 @@
     if (self.delegate) {
         [self.delegate barButtonClicked:sender];
     }
+    
+    [self.scrollView scrollRectToVisible:sender.frame animated:YES];
 }
 
 #pragma mark - Public
@@ -124,39 +132,44 @@
 
     SPSlideTabButton *targetButton;
     
-    if (percentage > 0) {
+    if (percentage > 0.0) {
         NSInteger targetIndex = self.selectedIndex + 1;
         if (targetIndex < [self barButtons].count) {
             targetButton = [self nextButton];
-            
-            
-            
         }
-        else {
-            NSInteger targetIndex = self.selectedIndex - 1;
-            if (targetIndex >= 0) {
-                targetButton = [self previousButton];
-            }
+    }
+    else if (percentage < 0.0){
+        NSInteger targetIndex = self.selectedIndex - 1;
+        if (targetIndex >= 0) {
+            targetButton = [self previousButton];
         }
     }
     else {
-        
+        targetButton = [self selectedButton];
     }
     
     if(targetButton) {
+        
+        SPSlideTabButton *originButton = [self selectedButton];
+        
+        CGFloat originOriginX = CGRectGetMidX(originButton.frame) - [originButton widthToFit] / 2;
+        CGFloat originFrameWidth = [originButton widthToFit];
+
         CGFloat targetOriginX = CGRectGetMidX(targetButton.frame) - [targetButton widthToFit] / 2;
         CGFloat targetFrameWidth = [targetButton widthToFit];
         
         CGRect frame = self.selectedView.frame;
-        frame.origin.x += (targetOriginX - frame.origin.x) * percentage;
-        frame.size.width += (targetFrameWidth - frame.size.width) * percentage;
+        frame.origin.y = self.scrollView.frame.size.height - frame.size.height;
+        frame.origin.x = originOriginX + (targetOriginX - originOriginX) * fabs(percentage);
+        frame.size.width = originFrameWidth + (targetFrameWidth - originFrameWidth) * fabs(percentage);
         self.selectedView.frame = frame;
+
     }
 }
 
 #pragma private
 - (void)fixSelectedView {
-    [UIView animateWithDuration:0.25 animations:^(void) {
+    [UIView animateWithDuration:0.2 animations:^(void) {
         
         CGRect frame = self.selectedView.frame;
         frame.size.width = [[self selectedButton] widthToFit];
@@ -170,7 +183,6 @@
 
 #pragma mark - getter / setter
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
-    
     
     _selectedIndex = selectedIndex;
     

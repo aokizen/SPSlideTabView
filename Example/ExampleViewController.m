@@ -47,10 +47,18 @@
     UIView *fourth = [[UIView alloc] initWithFrame:CGRectZero];
     [fourth setBackgroundColor:[UIColor purpleColor]];
     
-    [self.slideTabView addPageView:first ForTitle:@"通知"];
-    [self.slideTabView addPageView:second ForTitle:@"消息"];
-    [self.slideTabView addPageView:third ForTitle:@"反馈"];
-    [self.slideTabView addPageView:fourth ForTitle:@"广播"];
+    UIView *fifth = [[UIView alloc] initWithFrame:CGRectZero];
+    [fifth setBackgroundColor:[UIColor redColor]];
+    
+    [self.slideTabView addPageView:first ForTitle:@"One"];
+    [self.slideTabView addPageView:second ForTitle:@"Two"];
+    
+    [self.slideTabView addPageView:third ForTitle:@"Three"];
+    [self.slideTabView addPageView:fifth ForTitle:@"this is a long title"];
+    [self.slideTabView addPageView:fourth ForTitle:@"Four"];
+    
+    
+    
     //[self.slideTabView addPageForTitle:@"other title"];
     
     

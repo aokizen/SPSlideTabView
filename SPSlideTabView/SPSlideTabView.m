@@ -20,6 +20,8 @@
 
 #define KVO_CONTEXT_SCROLL_CONTENT_OFFSET @"KVO_CONTEXT_SCROLL_CONTENT_OFFSET"
 
+#define kSlideVelocity 1500.0
+
 @interface SPSlideTabView () <UIScrollViewDelegate, SPSlideTabBarDelegate> {
     CGPoint _locationBeforePan;
     CGPoint _locationAfterPan;
@@ -150,11 +152,14 @@
 
 - (void)scrollToPage:(NSUInteger)page {
 
-    [UIView animateWithDuration:0.15 animations:^(void) {
+    CGFloat targetOffsetX = self.frame.size.width * page;
+    CGFloat seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
+    
+    [UIView animateWithDuration:seconds animations:^(void) {
         [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
-        [self setSelectedPageIndex:page];
     }completion:^(BOOL finished) {
         [self.tabBar setSelectedIndex:page];
+        [self setSelectedPageIndex:page];
     }];
 }
 
@@ -167,7 +172,6 @@
     if (page != self.selectedPageIndex) {
         [self scrollToPage:page];
     }
-    
 }
 
 #pragma mark - Observer
@@ -175,7 +179,7 @@
     if (object == self.scrollView) {
         if (context == KVO_CONTEXT_SCROLL_CONTENT_OFFSET) {
 
-            [self.tabBar setScrollOffsetPercentage:self.scrollView.contentOffset.x / (CGFloat)self.scrollView.frame.size.width];
+            [self.tabBar setScrollOffsetPercentage:self.scrollView.contentOffset.x / (CGFloat)self.scrollView.frame.size.width - self.selectedPageIndex];
         }
     }
 }
