@@ -8,7 +8,8 @@
 
 #import "SPSlideTabButton.h"
 
-#define kSlideTabButtonMinWidth 60
+#define kSlideTabButtonMinWidth 80
+#define kContenPadding 8
 
 @implementation SPSlideTabButton
 
@@ -21,6 +22,7 @@
         [self setTitle:title forState:UIControlStateNormal];
 
         CGSize size = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, height)];
+        size.width += kContenPadding * 2;
         if (size.width < kSlideTabButtonMinWidth) {
             size.width = kSlideTabButtonMinWidth;
         }

@@ -38,10 +38,9 @@
 
 - (void)commonInit {
     
-    SPSlideTabBar *slideTabBar = [[SPSlideTabBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 49)];
-    [slideTabBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
-    [self addSubview:slideTabBar];
-    self.tabBar = slideTabBar;
+    self.tabBar = [[SPSlideTabBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 49)];
+    [self.tabBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
+    [self addSubview:self.tabBar];
     
 }
 

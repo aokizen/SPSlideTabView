@@ -15,6 +15,7 @@
 @property (strong, nonatomic) NSMutableArray *buttons;
 
 @property (strong, nonatomic) UIView *selectedView;
+@property (strong, nonatomic) UIScrollView *scrollView;
 
 
 @end
@@ -34,18 +35,43 @@
 }
 
 - (void)commonInit {
+    
     self.buttons = [NSMutableArray array];
     
-    UIView *selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 2)];
-    [selectedView setBackgroundColor:[self selectedViewColor]];
-    [self addSubview:selectedView];
-    self.selectedView = selectedView;
+    self.scrollView= [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self addSubview:self.scrollView];
     
+    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 2)];
+    [self.scrollView addSubview:self.selectedView];
+    
+    [self reset];
+}
+
+- (void)reset {
+    
+    [self.scrollView setContentInset:UIEdgeInsetsZero];
+    [self.scrollView setBackgroundColor:[UIColor clearColor]];
+    [self.scrollView setShowsHorizontalScrollIndicator:NO];
+    [self.scrollView setShowsVerticalScrollIndicator:NO];
+    
+    
+    [self.selectedView setBackgroundColor:[self selectedViewColor]];
+    
+    
+    [self setBackgroundColor:[UIColor clearColor]];
+    
+}
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    
+    [self reset];
 }
 
 #pragma mark - Public
 - (void)addTabForTitle:(NSString *)title {
-    SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
+    SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.scrollView.frame.size.height];
     
     if ([self barButtons].count > 0) {
         
@@ -58,9 +84,12 @@
     [button addTarget:self action:@selector(barButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [button setTag:[self barButtons].count];
     
-    [self addSubview:button];
     
     [self.buttons addObject:button];
+    
+    [self.scrollView addSubview:button];
+    
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.scrollView.frame.size.height)];
 }
 
 
@@ -80,9 +109,10 @@
         CGRect frame = self.selectedView.frame;
         frame.size.width = [[self selectedButton] widthToFit];
         frame.origin.y = self.frame.size.height - frame.size.height;
+        frame.origin.x = CGRectGetMidX( [self selectedButton].frame) - frame.size.width / 2;
         self.selectedView.frame = frame;
-        
-        self.selectedView.center = CGPointMake([self selectedButton].center.x, self.selectedView.center.y);
+    } completion:^(BOOL finished) {
+        [self.scrollView scrollRectToVisible:[self selectedButton].frame animated:YES];
     }];
 }
 

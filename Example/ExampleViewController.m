@@ -31,13 +31,25 @@
 {
     [super viewDidLoad];
     
+    if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
+       // self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
     
     [self.slideTabView addPageForTitle:@"One"];
     [self.slideTabView addPageForTitle:@"Two"];
-    [self.slideTabView addPageForTitle:@"Three"];
     [self.slideTabView addPageForTitle:@"This is a long title"];
+    [self.slideTabView addPageForTitle:@"Three"];
+    [self.slideTabView addPageForTitle:@"other title"];
+    
     
     [self.slideTabView setSelectedPageIndex:2];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"%@", self.slideTabView);
 }
 
 

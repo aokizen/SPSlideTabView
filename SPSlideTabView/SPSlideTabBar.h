@@ -10,7 +10,7 @@
 
 @class SPSlideTabButton;
 
-@interface SPSlideTabBar : UIToolbar
+@interface SPSlideTabBar : UIView
 
 @property (strong, nonatomic) NSArray *barButtons;
 
