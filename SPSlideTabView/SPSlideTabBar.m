@@ -26,6 +26,10 @@
 @synthesize selectedViewColor = _selectedViewColor;
 @synthesize barButtonMinWidth = _barButtonMinWidth;
 
+- (void)dealloc {
+    self.delegate = nil;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -64,14 +68,6 @@
     
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    [self reset];
-    
-    
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -95,7 +91,9 @@
 
 #pragma mark - Action
 - (IBAction)barButtonClicked:(SPSlideTabButton *)sender {
-    [self setSelectedIndex:sender.tag];
+    if (self.delegate) {
+        [self.delegate barButtonClicked:sender];
+    }
 }
 
 #pragma mark - Public
@@ -120,6 +118,40 @@
     [self.scrollView addSubview:button];
     
     [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.scrollView.frame.size.height)];
+}
+
+- (void)setScrollOffsetPercentage:(CGFloat)percentage {
+
+    SPSlideTabButton *targetButton;
+    
+    if (percentage > 0) {
+        NSInteger targetIndex = self.selectedIndex + 1;
+        if (targetIndex < [self barButtons].count) {
+            targetButton = [self nextButton];
+            
+            
+            
+        }
+        else {
+            NSInteger targetIndex = self.selectedIndex - 1;
+            if (targetIndex >= 0) {
+                targetButton = [self previousButton];
+            }
+        }
+    }
+    else {
+        
+    }
+    
+    if(targetButton) {
+        CGFloat targetOriginX = CGRectGetMidX(targetButton.frame) - [targetButton widthToFit] / 2;
+        CGFloat targetFrameWidth = [targetButton widthToFit];
+        
+        CGRect frame = self.selectedView.frame;
+        frame.origin.x += (targetOriginX - frame.origin.x) * percentage;
+        frame.size.width += (targetFrameWidth - frame.size.width) * percentage;
+        self.selectedView.frame = frame;
+    }
 }
 
 #pragma private

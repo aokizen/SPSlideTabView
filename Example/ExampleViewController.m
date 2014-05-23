@@ -35,11 +35,22 @@
        // self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    UIView *first = [[UIView alloc] initWithFrame:CGRectZero];
+    [first setBackgroundColor:[UIColor yellowColor]];
     
-    [self.slideTabView addPageForTitle:@"通知"];
-    [self.slideTabView addPageForTitle:@"消息"];
-    [self.slideTabView addPageForTitle:@"反馈"];
-    [self.slideTabView addPageForTitle:@"广播"];
+    UIView *second = [[UIView alloc] initWithFrame:CGRectZero];
+    [second setBackgroundColor:[UIColor blueColor]];
+    
+    UIView *third = [[UIView alloc] initWithFrame:CGRectZero];
+    [third setBackgroundColor:[UIColor orangeColor]];
+    
+    UIView *fourth = [[UIView alloc] initWithFrame:CGRectZero];
+    [fourth setBackgroundColor:[UIColor purpleColor]];
+    
+    [self.slideTabView addPageView:first ForTitle:@"通知"];
+    [self.slideTabView addPageView:second ForTitle:@"消息"];
+    [self.slideTabView addPageView:third ForTitle:@"反馈"];
+    [self.slideTabView addPageView:fourth ForTitle:@"广播"];
     //[self.slideTabView addPageForTitle:@"other title"];
     
     

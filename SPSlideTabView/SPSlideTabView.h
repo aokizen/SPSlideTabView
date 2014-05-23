@@ -14,11 +14,11 @@
 
 @property (assign, nonatomic) NSUInteger selectedPageIndex;
 
-@property (strong, nonatomic) NSArray *pageViews;
+@property (strong, nonatomic) NSArray *pageViewContainerPanels;
 
 @property (strong, nonatomic) SPSlideTabBar *tabBar;
 
 
-- (void)addPageForTitle:(NSString *)title;
+- (void)addPageView:(UIView *)pageView ForTitle:(NSString *)title;
 
 @end

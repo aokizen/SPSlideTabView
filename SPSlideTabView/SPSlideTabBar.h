@@ -16,6 +16,12 @@ typedef enum {
 
 @class SPSlideTabButton;
 
+@protocol SPSlideTabBarDelegate <NSObject>
+
+- (void)barButtonClicked:(SPSlideTabButton *)button;
+
+@end
+
 @interface SPSlideTabBar : UIView
 
 @property (strong, nonatomic) NSArray *barButtons;
@@ -30,9 +36,9 @@ typedef enum {
 @property (assign, nonatomic) SPSlideTabBarSeparatorStyle *separatorStyle;
 @property (strong, nonatomic) UIColor *separatorColor;
 
-
-
+@property (weak, nonatomic) id<SPSlideTabBarDelegate> delegate;
 
 - (void)addTabForTitle:(NSString *)title;
+- (void)setScrollOffsetPercentage:(CGFloat)percentage;
 
 @end
