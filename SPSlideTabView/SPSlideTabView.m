@@ -8,12 +8,10 @@
 
 #import "SPSlideTabView.h"
 
-#import "SPSlideTabBar.h"
 #import "SPSlideTabButton.h"
 
 @interface SPSlideTabView ()
 
-@property (strong, nonatomic) SPSlideTabBar *tabBar;
 
 @end
 

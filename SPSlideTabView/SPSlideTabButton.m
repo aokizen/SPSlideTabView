@@ -8,10 +8,11 @@
 
 #import "SPSlideTabButton.h"
 
-#define kSlideTabButtonMinWidth 80
 #define kContenPadding 8
 
 @implementation SPSlideTabButton
+
+@synthesize minWidth = _minWidth;
 
 - (id)initWithTitle:(NSString *)title WithHeight:(CGFloat)height {
     
@@ -21,13 +22,8 @@
         [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];
 
-        CGSize size = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, height)];
-        size.width += kContenPadding * 2;
-        if (size.width < kSlideTabButtonMinWidth) {
-            size.width = kSlideTabButtonMinWidth;
-        }
-        
-        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, height)];
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, 0, height)];
+        [self fitSize];
     }
     
     return self;
@@ -36,6 +32,24 @@
 - (CGFloat)widthToFit {
     CGSize size = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, self.frame.size.height)];
     return size.width;
+}
+
+- (void)fitSize {
+    CGSize size = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, self.frame.size.height)];
+    size.width += kContenPadding * 2;
+    if (size.width < self.minWidth) {
+        size.width = self.minWidth;
+    }
+    [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height)];
+}
+
+#pragma mark - setter / getter
+- (CGFloat)minWidth {
+    if (_minWidth) {
+        return _minWidth;
+    }
+    
+    return kSlideTabButtonMinWidth;
 }
 
 @end

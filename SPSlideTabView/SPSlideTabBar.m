@@ -24,6 +24,7 @@
 
 @synthesize selectedIndex = _selectedIndex;
 @synthesize selectedViewColor = _selectedViewColor;
+@synthesize barButtonMinWidth = _barButtonMinWidth;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -42,7 +43,7 @@
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.scrollView];
     
-    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 2)];
+    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 2, 0, 2)];
     [self.scrollView addSubview:self.selectedView];
     
     [self reset];
@@ -67,11 +68,40 @@
     [super drawRect:rect];
     
     [self reset];
+    
+    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    CGFloat originX = 0;
+    for (int i = 0; i < [self barButtons].count; i ++) {
+        SPSlideTabButton *button = [[self barButtons] objectAtIndex:i];
+        [button setMinWidth:self.barButtonMinWidth];
+        [button fitSize];
+        
+        CGRect frame = button.frame;
+        frame.origin.x = originX;
+        button.frame = frame;
+        
+        originX += frame.size.width;
+    }
+    
+    [self.scrollView setContentSize:CGSizeMake(originX, self.scrollView.frame.size.height)];
+    
+    [self fixSelectedView];
+}
+
+#pragma mark - Action
+- (IBAction)barButtonClicked:(SPSlideTabButton *)sender {
+    [self setSelectedIndex:sender.tag];
 }
 
 #pragma mark - Public
 - (void)addTabForTitle:(NSString *)title {
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.scrollView.frame.size.height];
+    if (button.frame.size.width < [self barButtonMinWidth])
     
     if ([self barButtons].count > 0) {
         
@@ -92,18 +122,8 @@
     [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.scrollView.frame.size.height)];
 }
 
-
-#pragma mark - Action
-- (IBAction)barButtonClicked:(SPSlideTabButton *)sender {
-    [self setSelectedIndex:sender.tag];
-}
-
-#pragma mark - getter / setter
-- (void)setSelectedIndex:(NSUInteger)selectedIndex {
-    
-    
-    _selectedIndex = selectedIndex;
-    
+#pragma private
+- (void)fixSelectedView {
     [UIView animateWithDuration:0.25 animations:^(void) {
         
         CGRect frame = self.selectedView.frame;
@@ -116,7 +136,15 @@
     }];
 }
 
-#pragma mark - Property
+#pragma mark - getter / setter
+- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+    
+    
+    _selectedIndex = selectedIndex;
+    
+    [self fixSelectedView];
+}
+
 - (NSArray *)barButtons {
     return self.buttons;
 }
@@ -157,6 +185,21 @@
     _selectedViewColor = selectedViewColor;
     
     [self.selectedView setBackgroundColor:_selectedViewColor];
+}
+
+- (CGFloat)barButtonMinWidth {
+    if (_barButtonMinWidth) {
+        return _barButtonMinWidth;
+    }
+    
+    return kSlideTabButtonMinWidth;
+}
+
+- (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth {
+    
+    _barButtonMinWidth = barButtonMinWidth;
+    
+    [self setNeedsLayout];
 }
 
 @end

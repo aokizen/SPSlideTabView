@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    SPSlideTabBarSeparatorStyleNone,
+    SPSlideTabBarSeparatorStyleSingleLine,
+    SPSlideTabBarSeparatorStyleDottedLine,
+}SPSlideTabBarSeparatorStyle;
+
 @class SPSlideTabButton;
 
 @interface SPSlideTabBar : UIView
@@ -16,9 +22,14 @@
 
 @property (strong, nonatomic) SPSlideTabButton *selectedButton;
 @property (assign, nonatomic) NSUInteger selectedIndex;
+@property (assign, nonatomic) CGFloat barButtonMinWidth;
 
 
 @property (strong, nonatomic) UIColor *selectedViewColor;
+
+@property (assign, nonatomic) SPSlideTabBarSeparatorStyle *separatorStyle;
+@property (strong, nonatomic) UIColor *separatorColor;
+
 
 
 

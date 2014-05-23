@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+
+#define kSlideTabButtonMinWidth 80
+
 @interface SPSlideTabButton : UIButton
+
+@property (assign, nonatomic) CGFloat minWidth;
 
 - (id)initWithTitle:(NSString *)title WithHeight:(CGFloat)height;
 
 - (CGFloat)widthToFit;
+- (void)fitSize;
 
 @end

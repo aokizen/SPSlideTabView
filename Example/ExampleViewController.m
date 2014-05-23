@@ -36,20 +36,22 @@
     }
     
     
-    [self.slideTabView addPageForTitle:@"One"];
-    [self.slideTabView addPageForTitle:@"Two"];
-    [self.slideTabView addPageForTitle:@"This is a long title"];
-    [self.slideTabView addPageForTitle:@"Three"];
-    [self.slideTabView addPageForTitle:@"other title"];
+    [self.slideTabView addPageForTitle:@"通知"];
+    [self.slideTabView addPageForTitle:@"消息"];
+    [self.slideTabView addPageForTitle:@"反馈"];
+    [self.slideTabView addPageForTitle:@"广播"];
+    //[self.slideTabView addPageForTitle:@"other title"];
     
     
-    [self.slideTabView setSelectedPageIndex:2];
+    [self.slideTabView setSelectedPageIndex:0];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     NSLog(@"%@", self.slideTabView);
+    
+    [self.slideTabView.tabBar setBarButtonMinWidth:80];
 }
 
 

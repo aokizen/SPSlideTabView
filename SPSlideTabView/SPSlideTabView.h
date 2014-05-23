@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@class SPSlideTabBar;
+#import "SPSlideTabBar.h"
 
 @interface SPSlideTabView : UIView
 
 @property (assign, nonatomic) NSUInteger selectedPageIndex;
 
 @property (strong, nonatomic) NSArray *pageViews;
+
+@property (strong, nonatomic) SPSlideTabBar *tabBar;
 
 
 - (void)addPageForTitle:(NSString *)title;
