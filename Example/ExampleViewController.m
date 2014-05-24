@@ -63,6 +63,9 @@
     
     
     [self.slideTabView setSelectedPageIndex:0];
+    
+    [self.slideTabView.tabBar setSeparatorLineInsetTop:8];
+    [self.slideTabView.tabBar setSeparatorColor:[UIColor cyanColor]];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

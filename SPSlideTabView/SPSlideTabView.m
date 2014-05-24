@@ -60,7 +60,7 @@
     
     self.tabBar = [[SPSlideTabBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 49)];
     [self.tabBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
-    [self.tabBar setDelegate:self];
+    [self.tabBar setSlideDelegate:self];
     [self addSubview:self.tabBar];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.tabBar.frame.size.height, self.frame.size.width, self.frame.size.height - self.tabBar.frame.size.height)];
@@ -153,7 +153,9 @@
 - (void)scrollToPage:(NSUInteger)page {
 
     CGFloat targetOffsetX = self.frame.size.width * page;
-    CGFloat seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
+    float seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
+    
+    NSLog(@"%f", seconds);
     
     [UIView animateWithDuration:seconds animations:^(void) {
         [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];

@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    SPSlideTabBarSeparatorStyleNone,
+    SPSlideTabBarSeparatorStyleNone = 1,
     SPSlideTabBarSeparatorStyleSingleLine,
-    SPSlideTabBarSeparatorStyleDottedLine,
 }SPSlideTabBarSeparatorStyle;
 
 @class SPSlideTabButton;
@@ -22,7 +21,7 @@ typedef enum {
 
 @end
 
-@interface SPSlideTabBar : UIView
+@interface SPSlideTabBar : UIScrollView
 
 @property (strong, nonatomic) NSArray *barButtons;
 
@@ -33,10 +32,11 @@ typedef enum {
 
 @property (strong, nonatomic) UIColor *selectedViewColor;
 
-@property (assign, nonatomic) SPSlideTabBarSeparatorStyle *separatorStyle;
+@property (assign, nonatomic) SPSlideTabBarSeparatorStyle separatorStyle;
 @property (strong, nonatomic) UIColor *separatorColor;
+@property (assign, nonatomic) CGFloat separatorLineInsetTop;
 
-@property (weak, nonatomic) id<SPSlideTabBarDelegate> delegate;
+@property (weak, nonatomic) id<SPSlideTabBarDelegate> slideDelegate;
 
 - (void)addTabForTitle:(NSString *)title;
 - (void)setScrollOffsetPercentage:(CGFloat)percentage;

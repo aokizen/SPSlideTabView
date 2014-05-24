@@ -15,8 +15,8 @@
 @property (strong, nonatomic) NSMutableArray *buttons;
 
 @property (strong, nonatomic) UIView *selectedView;
-@property (strong, nonatomic) UIScrollView *scrollView;
 
+@property (strong, nonatomic) NSMutableArray *lineViews;
 
 @end
 
@@ -25,6 +25,9 @@
 @synthesize selectedIndex = _selectedIndex;
 @synthesize selectedViewColor = _selectedViewColor;
 @synthesize barButtonMinWidth = _barButtonMinWidth;
+@synthesize separatorStyle = _separatorStyle;
+@synthesize separatorColor = _separatorColor;
+@synthesize separatorLineInsetTop = _separatorLineInsetTop;
 
 - (void)dealloc {
     self.delegate = nil;
@@ -42,29 +45,26 @@
 - (void)commonInit {
     
     self.buttons = [NSMutableArray array];
-    
-    self.scrollView= [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [self addSubview:self.scrollView];
-    
-    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 2, 0, 2)];
-    [self.scrollView addSubview:self.selectedView];
+    self.lineViews = [NSMutableArray array];
+
+    self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 2, 0, 2)];
+    [self addSubview:self.selectedView];
     
     [self reset];
 }
 
 - (void)reset {
     
-    [self.scrollView setContentInset:UIEdgeInsetsZero];
-    [self.scrollView setBackgroundColor:[UIColor clearColor]];
-    [self.scrollView setShowsHorizontalScrollIndicator:NO];
-    [self.scrollView setShowsVerticalScrollIndicator:NO];
+    [self setContentInset:UIEdgeInsetsZero];
+    [self setBackgroundColor:[UIColor clearColor]];
+    [self setShowsHorizontalScrollIndicator:NO];
+    [self setShowsVerticalScrollIndicator:NO];
     
     
     [self.selectedView setBackgroundColor:[self selectedViewColor]];
     
-    
-    [self setBackgroundColor:[UIColor clearColor]];
+    [self.lineViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.lineViews removeAllObjects];
     
 }
 
@@ -72,6 +72,25 @@
     [super drawRect:rect];
     
     [self reset];
+    
+    if (self.separatorStyle != SPSlideTabBarSeparatorStyleNone) {
+        
+        if ([self barButtons].count > 1) {
+            
+            for (int i = 1; i < [self barButtons].count; i++) {
+                SPSlideTabButton *button = [[self barButtons] objectAtIndex:i];
+                
+                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(button.frame.origin.x - 0.5, [self separatorLineInsetTop], 1, button.frame.size.height - [self separatorLineInsetTop] * 2)];
+                [line setBackgroundColor:[self separatorColor]];
+                [line setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight];
+                [self.lineViews addObject:line];
+                [self addSubview:line];
+                
+            }
+        }
+        
+    }
+
 }
 
 - (void)layoutSubviews {
@@ -90,23 +109,26 @@
         originX += frame.size.width;
     }
     
-    [self.scrollView setContentSize:CGSizeMake(originX, self.scrollView.frame.size.height)];
+    [self setContentSize:CGSizeMake(originX, self.frame.size.height)];
     
     [self fixSelectedView];
 }
 
 #pragma mark - Action
 - (IBAction)barButtonClicked:(SPSlideTabButton *)sender {
-    if (self.delegate) {
-        [self.delegate barButtonClicked:sender];
+    if (self.slideDelegate) {
+        [self.slideDelegate barButtonClicked:sender];
     }
     
-    [self.scrollView scrollRectToVisible:sender.frame animated:YES];
+    [UIView animateWithDuration:0.2 animations:^(void) {
+        
+        [self scrollRectToVisible:[self selectedButton].frame animated:NO];
+    }];
 }
 
 #pragma mark - Public
 - (void)addTabForTitle:(NSString *)title {
-    SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.scrollView.frame.size.height];
+    SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
     if (button.frame.size.width < [self barButtonMinWidth])
     
     if ([self barButtons].count > 0) {
@@ -123,9 +145,11 @@
     
     [self.buttons addObject:button];
     
-    [self.scrollView addSubview:button];
+    [self addSubview:button];
     
-    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.scrollView.frame.size.height)];
+    [self setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.frame.size.height)];
+    
+    [self setNeedsDisplay];
 }
 
 - (void)setScrollOffsetPercentage:(CGFloat)percentage {
@@ -159,7 +183,7 @@
         CGFloat targetFrameWidth = [targetButton widthToFit];
         
         CGRect frame = self.selectedView.frame;
-        frame.origin.y = self.scrollView.frame.size.height - frame.size.height;
+        frame.origin.y = self.frame.size.height - frame.size.height;
         frame.origin.x = originOriginX + (targetOriginX - originOriginX) * fabs(percentage);
         frame.size.width = originFrameWidth + (targetFrameWidth - originFrameWidth) * fabs(percentage);
         self.selectedView.frame = frame;
@@ -177,7 +201,11 @@
         frame.origin.x = CGRectGetMidX( [self selectedButton].frame) - frame.size.width / 2;
         self.selectedView.frame = frame;
     } completion:^(BOOL finished) {
-        [self.scrollView scrollRectToVisible:[self selectedButton].frame animated:YES];
+        
+        [UIView animateWithDuration:0.2 animations:^(void) {
+        
+            [self scrollRectToVisible:[self selectedButton].frame animated:NO];
+        }];
     }];
 }
 
@@ -221,7 +249,7 @@
         return _selectedViewColor;
     }
     
-    return [UIColor colorWithRed:62.0f / 255.0f green:158.0f / 255.0f blue:133.0f / 255.0f alpha:1.0f];
+    return [UIColor magentaColor];
 }
 
 
@@ -244,6 +272,41 @@
     _barButtonMinWidth = barButtonMinWidth;
     
     [self setNeedsLayout];
+}
+
+
+- (SPSlideTabBarSeparatorStyle)separatorStyle {
+    if (_separatorStyle) {
+        return _separatorStyle;
+    }
+    
+    return SPSlideTabBarSeparatorStyleSingleLine;
+}
+
+- (void)setSeparatorStyle:(SPSlideTabBarSeparatorStyle)separatorStyle {
+    _separatorStyle = separatorStyle;
+    
+    [self setNeedsDisplay];
+}
+
+- (UIColor *)separatorColor {
+    if (_separatorColor) {
+        return _separatorColor;
+    }
+    
+    return [UIColor clearColor];
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor {
+    _separatorColor = separatorColor;
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setSeparatorLineInsetTop:(CGFloat)separatorLineInsetTop {
+    _separatorLineInsetTop = separatorLineInsetTop;
+    
+    [self setNeedsDisplay];
 }
 
 @end

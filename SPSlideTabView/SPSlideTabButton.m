@@ -19,6 +19,7 @@
     self = [SPSlideTabButton buttonWithType:UIButtonTypeCustom];
     if (self) {
     
+        [self setBackgroundColor:[UIColor clearColor]];
         [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];
 
