@@ -64,11 +64,11 @@
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
-    [self.scrollView setBounces:YES];
+    [self.scrollView setBounces:NO];
     [self.scrollView setAlwaysBounceVertical:NO];
-    [self.scrollView setAlwaysBounceHorizontal:YES];
+    [self.scrollView setAlwaysBounceHorizontal:NO];
     [self.scrollView setPagingEnabled:YES];
-    [self.scrollView setClipsToBounds:NO];
+    [self.scrollView setClipsToBounds:YES];
     [self addSubview:self.scrollView];
     
     [self.scrollView setDelegate:self];
@@ -106,7 +106,7 @@
     [containerPanel addSubview:pageView];
     [self.scrollView addSubview:containerPanel];
     
-    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), self.scrollView.frame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), containerPanel.frame.size.height)];
     
 }
 
@@ -121,6 +121,11 @@
     }completion:^(BOOL finished) {
         [self.tabBar setSelectedIndex:page];
         [self setSelectedPageIndex:page];
+        
+        if (self.pageViewContainerPanels.count > page) {
+            UIView *containerPanel = [self.pageViewContainerPanels objectAtIndex:page];
+            [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, containerPanel.frame.size.height)];
+        }
         
         if (self.delegate) {
             [self.delegate slideTabView:self didScrollToPageIndex:page];
