@@ -28,9 +28,11 @@
 @synthesize separatorStyle = _separatorStyle;
 @synthesize separatorColor = _separatorColor;
 @synthesize separatorLineInsetTop = _separatorLineInsetTop;
+@synthesize barButtonTitleColor = _barButtonTitleColor;
 
 - (void)dealloc {
     self.delegate = nil;
+    self.slideDelegate = nil;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -129,7 +131,9 @@
 #pragma mark - Public
 - (void)addTabForTitle:(NSString *)title {
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
-    if (button.frame.size.width < [self barButtonMinWidth])
+    [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
+    
+    //if (button.frame.size.width < [self barButtonMinWidth])
     
     if ([self barButtons].count > 0) {
         
@@ -307,6 +311,23 @@
     _separatorLineInsetTop = separatorLineInsetTop;
     
     [self setNeedsDisplay];
+}
+
+- (UIColor *)barButtonTitleColor {
+    if (_barButtonTitleColor) {
+        return _barButtonTitleColor;
+    }
+    
+    return [UIColor blueColor];
+}
+
+- (void)setBarButtonTitleColor:(UIColor *)titleColor {
+    _barButtonTitleColor = titleColor;
+    
+    [[self barButtons] enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        SPSlideTabButton *button = (SPSlideTabButton *)obj;
+        [button setTitleColor:self.barButtonTitleColor forState:UIControlStateNormal];
+    }];
 }
 
 @end

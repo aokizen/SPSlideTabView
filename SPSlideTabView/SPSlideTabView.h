@@ -8,18 +8,38 @@
 
 #import <UIKit/UIKit.h>
 
-@class SPSlideTabBar;
+#import "SPSlideTabBar.h"
 
+@protocol SPSlideTabViewDelegate;
 
 @interface SPSlideTabView : UIView
+
+@property (assign, nonatomic) CGFloat tabBarHeight;
 
 @property (assign, nonatomic) NSUInteger selectedPageIndex;
 
 @property (strong, nonatomic) NSArray *pageViewContainerPanels;
 
 @property (strong, nonatomic) SPSlideTabBar *tabBar;
+@property (weak, nonatomic) id<SPSlideTabViewDelegate> delegate;
 
 
 - (void)addPageView:(UIView *)pageView ForTitle:(NSString *)title;
+
+#pragma mark - style
+- (void)setTabBarHeight:(CGFloat)height;
+- (void)setSelectedViewColor:(UIColor *)selectedViewColor;
+- (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth;
+- (void)setSeparatorStyle:(SPSlideTabBarSeparatorStyle)separatorStyle;
+- (void)setSeparatorColor:(UIColor *)separatorColor;
+- (void)setSeparatorLineInsetTop:(CGFloat)separatorLineInsetTop;
+- (void)setTabBarBackgroundColor:(UIColor *)color;
+- (void)setBarButtonTitleColor:(UIColor *)titleColor;
+
+@end
+
+@protocol SPSlideTabViewDelegate <NSObject>
+
+- (void)slideTabView:(SPSlideTabView *)slideTabView didScrollToPageIndex:(NSInteger)pageIndex;
 
 @end

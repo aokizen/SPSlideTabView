@@ -20,7 +20,6 @@
     if (self) {
     
         [self setBackgroundColor:[UIColor clearColor]];
-        [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];
 
         [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, 0, height)];

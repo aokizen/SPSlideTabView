@@ -8,7 +8,6 @@
 
 #import "SPSlideTabView.h"
 
-#import "SPSlideTabBar.h"
 #import "SPSlideTabButton.h"
 
 #define KVO_CONTEXT_SCROLL_CONTENT_OFFSET @"KVO_CONTEXT_SCROLL_CONTENT_OFFSET"
@@ -26,8 +25,11 @@
 
 @implementation SPSlideTabView
 
+@synthesize tabBarHeight = _tabBarHeight;
+
 - (void)dealloc {
     [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
+    self.delegate = nil;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -51,7 +53,7 @@
     
     self.pageViewContainerPanels = [NSMutableArray array];
     
-    self.tabBar = [[SPSlideTabBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 49)];
+    self.tabBar = [[SPSlideTabBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self tabBarHeight])];
     [self.tabBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [self.tabBar setSlideDelegate:self];
     [self addSubview:self.tabBar];
@@ -108,6 +110,26 @@
     
 }
 
+#pragma mark - private
+- (void)scrollToPage:(NSUInteger)page {
+    
+    CGFloat targetOffsetX = self.frame.size.width * page;
+    float seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
+    
+    NSLog(@"%f", seconds);
+    
+    [UIView animateWithDuration:seconds animations:^(void) {
+        [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
+    }completion:^(BOOL finished) {
+        [self.tabBar setSelectedIndex:page];
+        [self setSelectedPageIndex:page];
+        
+        if (self.delegate) {
+            [self.delegate slideTabView:self didScrollToPageIndex:page];
+        }
+    }];
+}
+
 #pragma mark - style
 - (void)styleContainerPanel:(UIView *)containerPanel {
     
@@ -143,19 +165,48 @@
     return nil;
 }
 
-- (void)scrollToPage:(NSUInteger)page {
+- (CGFloat)tabBarHeight {
+    if (_tabBarHeight) {
+        return _tabBarHeight;
+    }
+    
+    return 49;
+}
 
-    CGFloat targetOffsetX = self.frame.size.width * page;
-    float seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
+- (void)setTabBarHeight:(CGFloat)height {
+    _tabBarHeight = height;
     
-    NSLog(@"%f", seconds);
-    
-    [UIView animateWithDuration:seconds animations:^(void) {
-        [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
-    }completion:^(BOOL finished) {
-        [self.tabBar setSelectedIndex:page];
-        [self setSelectedPageIndex:page];
-    }];
+    [self.tabBar setFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y, self.tabBar.frame.size.width, self.tabBarHeight)];
+    [self.scrollView setFrame:CGRectMake(self.scrollView.frame.origin.x, CGRectGetMaxY(self.tabBar.frame), self.scrollView.frame.size.width, self.frame.size.height - CGRectGetMaxY(self.tabBar.frame))];
+}
+
+#pragma mark - style setter
+- (void)setSelectedViewColor:(UIColor *)selectedViewColor {
+    [self.tabBar setSelectedViewColor:selectedViewColor];
+}
+
+- (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth {
+    [self.tabBar setBarButtonMinWidth:barButtonMinWidth];
+}
+
+- (void)setSeparatorStyle:(SPSlideTabBarSeparatorStyle)separatorStyle {
+    [self.tabBar setSeparatorStyle:separatorStyle];
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor {
+    [self.tabBar setSeparatorColor:separatorColor];
+}
+
+- (void)setSeparatorLineInsetTop:(CGFloat)separatorLineInsetTop {
+    [self.tabBar setSeparatorLineInsetTop:separatorLineInsetTop];
+}
+
+- (void)setTabBarBackgroundColor:(UIColor *)color {
+    [self.tabBar setBackgroundColor:color];
+}
+
+- (void)setBarButtonTitleColor:(UIColor *)titleColor {
+    [self.tabBar setBarButtonTitleColor:titleColor];
 }
 
 #pragma mark - UIScrollViewDelegate
