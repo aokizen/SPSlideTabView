@@ -31,11 +31,13 @@ typedef enum {
 
 
 @property (strong, nonatomic) UIColor *selectedViewColor;
+@property (assign, nonatomic) BOOL selectedViewSizeToFit;
 
 @property (assign, nonatomic) SPSlideTabBarSeparatorStyle separatorStyle;
 @property (strong, nonatomic) UIColor *separatorColor;
 @property (assign, nonatomic) CGFloat separatorLineInsetTop;
 @property (strong, nonatomic) UIColor *barButtonTitleColor;
+@property (strong, nonatomic) UIFont *barButtonTitleFont;
 
 @property (weak, nonatomic) id<SPSlideTabBarDelegate> slideDelegate;
 

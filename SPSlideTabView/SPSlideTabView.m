@@ -12,7 +12,7 @@
 
 #define KVO_CONTEXT_SCROLL_CONTENT_OFFSET @"KVO_CONTEXT_SCROLL_CONTENT_OFFSET"
 
-#define kSlideVelocity 1500.0
+#define kSlideVelocity 2000.0
 
 @interface SPSlideTabView () <UIScrollViewDelegate, SPSlideTabBarDelegate> {
     CGPoint _locationBeforePan;
@@ -116,8 +116,6 @@
     CGFloat targetOffsetX = self.frame.size.width * page;
     float seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
     
-    NSLog(@"%f", seconds);
-    
     [UIView animateWithDuration:seconds animations:^(void) {
         [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
     }completion:^(BOOL finished) {
@@ -177,12 +175,16 @@
     _tabBarHeight = height;
     
     [self.tabBar setFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y, self.tabBar.frame.size.width, self.tabBarHeight)];
-    [self.scrollView setFrame:CGRectMake(self.scrollView.frame.origin.x, CGRectGetMaxY(self.tabBar.frame), self.scrollView.frame.size.width, self.frame.size.height - CGRectGetMaxY(self.tabBar.frame))];
+    [self.scrollView setFrame:CGRectMake(self.scrollView.frame.origin.x,self.tabBarHeight, self.scrollView.frame.size.width, self.frame.size.height - self.tabBarHeight)];
 }
 
 #pragma mark - style setter
 - (void)setSelectedViewColor:(UIColor *)selectedViewColor {
     [self.tabBar setSelectedViewColor:selectedViewColor];
+}
+
+- (void)setSelectedViewSizeToFit:(BOOL)fit {
+    [self.tabBar setSelectedViewSizeToFit:fit];
 }
 
 - (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth {
@@ -207,6 +209,10 @@
 
 - (void)setBarButtonTitleColor:(UIColor *)titleColor {
     [self.tabBar setBarButtonTitleColor:titleColor];
+}
+
+- (void)setBarButtonTitleFont:(UIFont *)titleFont {
+    [self.tabBar setBarButtonTitleFont:titleFont];
 }
 
 #pragma mark - UIScrollViewDelegate

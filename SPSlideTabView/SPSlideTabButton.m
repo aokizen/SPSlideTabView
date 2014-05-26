@@ -21,7 +21,6 @@
     
         [self setBackgroundColor:[UIColor clearColor]];
         [self setTitle:title forState:UIControlStateNormal];
-
         [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, 0, height)];
         [self fitSize];
     }

@@ -24,11 +24,13 @@
 
 @synthesize selectedIndex = _selectedIndex;
 @synthesize selectedViewColor = _selectedViewColor;
+@synthesize selectedViewSizeToFit = _selectedViewSizeToFit;
 @synthesize barButtonMinWidth = _barButtonMinWidth;
 @synthesize separatorStyle = _separatorStyle;
 @synthesize separatorColor = _separatorColor;
 @synthesize separatorLineInsetTop = _separatorLineInsetTop;
 @synthesize barButtonTitleColor = _barButtonTitleColor;
+@synthesize barButtonTitleFont = _barButtonTitleFont;
 
 - (void)dealloc {
     self.delegate = nil;
@@ -52,6 +54,8 @@
     self.selectedView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 2, 0, 2)];
     [self addSubview:self.selectedView];
     
+    self.selectedViewSizeToFit = YES;
+    
     [self reset];
 }
 
@@ -65,8 +69,10 @@
     
     [self.selectedView setBackgroundColor:[self selectedViewColor]];
     
-    [self.lineViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.lineViews removeAllObjects];
+    if (self.lineViews.count > 0) {
+        [self.lineViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [self.lineViews removeAllObjects];
+    }
     
 }
 
@@ -132,6 +138,7 @@
 - (void)addTabForTitle:(NSString *)title {
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
     [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
+    button.titleLabel.font = [self barButtonTitleFont];
     
     //if (button.frame.size.width < [self barButtonMinWidth])
     
@@ -180,16 +187,13 @@
         
         SPSlideTabButton *originButton = [self selectedButton];
         
-        CGFloat originOriginX = CGRectGetMidX(originButton.frame) - [originButton widthToFit] / 2;
-        CGFloat originFrameWidth = [originButton widthToFit];
-
-        CGFloat targetOriginX = CGRectGetMidX(targetButton.frame) - [targetButton widthToFit] / 2;
-        CGFloat targetFrameWidth = [targetButton widthToFit];
+        CGRect originFrame = [self selectionFrameForBarButton:originButton];
+        CGRect targetFrame = [self selectionFrameForBarButton:targetButton];
         
         CGRect frame = self.selectedView.frame;
         frame.origin.y = self.frame.size.height - frame.size.height;
-        frame.origin.x = originOriginX + (targetOriginX - originOriginX) * fabs(percentage);
-        frame.size.width = originFrameWidth + (targetFrameWidth - originFrameWidth) * fabs(percentage);
+        frame.origin.x = originFrame.origin.x + (targetFrame.origin.x - originFrame.origin.x) * fabs(percentage);
+        frame.size.width = originFrame.size.width + (targetFrame.size.width - originFrame.size.width) * fabs(percentage);
         self.selectedView.frame = frame;
 
     }
@@ -197,20 +201,39 @@
 
 #pragma private
 - (void)fixSelectedView {
-    [UIView animateWithDuration:0.2 animations:^(void) {
-        
-        CGRect frame = self.selectedView.frame;
-        frame.size.width = [[self selectedButton] widthToFit];
-        frame.origin.y = self.frame.size.height - frame.size.height;
-        frame.origin.x = CGRectGetMidX( [self selectedButton].frame) - frame.size.width / 2;
-        self.selectedView.frame = frame;
-    } completion:^(BOOL finished) {
-        
+    
+    if ([self selectedButton]) {
+    
         [UIView animateWithDuration:0.2 animations:^(void) {
+
+            self.selectedView.frame = [self selectionFrameForBarButton:[self selectedButton]];
+            
+        } completion:^(BOOL finished) {
         
-            [self scrollRectToVisible:[self selectedButton].frame animated:NO];
+            [UIView animateWithDuration:0.2 animations:^(void) {
+        
+                [self scrollRectToVisible:[self selectedButton].frame animated:NO];
+            }];
         }];
-    }];
+    }
+}
+
+- (CGRect)selectionFrameForBarButton:(SPSlideTabButton *)button {
+
+    CGFloat originX = CGRectGetMidX(button.frame) - [button widthToFit] / 2;
+    CGFloat frameWidth = [button widthToFit];
+    if (!self.selectedViewSizeToFit) {
+        originX = CGRectGetMinX(button.frame);
+        frameWidth = button.frame.size.width;
+    }
+    
+    CGRect frame = self.selectedView.frame;
+    frame.origin.x = originX;
+    frame.size.width = frameWidth;
+    frame.origin.y = self.frame.size.height - frame.size.height;
+    frame.size.height = 2;
+    
+    return frame;
 }
 
 #pragma mark - getter / setter
@@ -244,7 +267,12 @@
 }
 
 - (SPSlideTabButton *)selectedButton {
-    return [[self barButtons] objectAtIndex:self.selectedIndex];
+    
+    if ([self barButtons].count > 0) {
+        return [[self barButtons] objectAtIndex:self.selectedIndex];
+    }
+    
+    return nil;
 }
 
 
@@ -261,6 +289,12 @@
     _selectedViewColor = selectedViewColor;
     
     [self.selectedView setBackgroundColor:_selectedViewColor];
+}
+
+- (void)setSelectedViewSizeToFit:(BOOL)selectedViewSizeToFit {
+    _selectedViewSizeToFit = selectedViewSizeToFit;
+    
+    [self fixSelectedView];
 }
 
 - (CGFloat)barButtonMinWidth {
@@ -324,10 +358,31 @@
 - (void)setBarButtonTitleColor:(UIColor *)titleColor {
     _barButtonTitleColor = titleColor;
     
-    [[self barButtons] enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-        SPSlideTabButton *button = (SPSlideTabButton *)obj;
-        [button setTitleColor:self.barButtonTitleColor forState:UIControlStateNormal];
-    }];
+    if ([self barButtons].count) {
+        [[self barButtons] enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+            SPSlideTabButton *button = (SPSlideTabButton *)obj;
+            [button setTitleColor:self.barButtonTitleColor forState:UIControlStateNormal];
+        }];
+    }
+}
+
+- (UIFont *)barButtonTitleFont {
+    if (_barButtonTitleFont) {
+        return _barButtonTitleFont;
+    }
+    
+    return [UIFont systemFontOfSize:17];
+}
+
+- (void)setBarButtonTitleFont:(UIFont *)barButtonTitleFont {
+    _barButtonTitleFont = barButtonTitleFont;
+    
+    if ([self barButtons].count) {
+        [[self barButtons] enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+            SPSlideTabButton *button = (SPSlideTabButton *)obj;
+            button.titleLabel.font = [self barButtonTitleFont];
+        }];
+    }
 }
 
 @end

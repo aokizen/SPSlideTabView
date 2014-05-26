@@ -28,6 +28,7 @@
 
 #pragma mark - style
 - (void)setTabBarHeight:(CGFloat)height;
+- (void)setSelectedViewSizeToFit:(BOOL)fit;
 - (void)setSelectedViewColor:(UIColor *)selectedViewColor;
 - (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth;
 - (void)setSeparatorStyle:(SPSlideTabBarSeparatorStyle)separatorStyle;
@@ -35,6 +36,7 @@
 - (void)setSeparatorLineInsetTop:(CGFloat)separatorLineInsetTop;
 - (void)setTabBarBackgroundColor:(UIColor *)color;
 - (void)setBarButtonTitleColor:(UIColor *)titleColor;
+- (void)setBarButtonTitleFont:(UIFont *)titleFont;
 
 @end
 
