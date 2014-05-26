@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "SPSlideTabBar.h"
+@class SPSlideTabBar;
+
 
 @interface SPSlideTabView : UIView
 

@@ -8,15 +8,8 @@
 
 #import "SPSlideTabView.h"
 
+#import "SPSlideTabBar.h"
 #import "SPSlideTabButton.h"
-
-#define DEBUG 1
-
-#ifdef DEBUG
-#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#   define DLog(...)
-#endif
 
 #define KVO_CONTEXT_SCROLL_CONTENT_OFFSET @"KVO_CONTEXT_SCROLL_CONTENT_OFFSET"
 
