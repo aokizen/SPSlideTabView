@@ -71,7 +71,7 @@
     [self.scrollView setClipsToBounds:YES];
     [self addSubview:self.scrollView];
     
-    [self.scrollView setDelegate:self];
+    //[self.scrollView setDelegate:self];
     [self.scrollView addObserver:self forKeyPath:@"contentOffset" options:0 context:KVO_CONTEXT_SCROLL_CONTENT_OFFSET];
     
 }
@@ -221,15 +221,15 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
-
-    CGFloat pageWidth = scrollView.frame.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-
-    if (page != self.selectedPageIndex) {
-        [self scrollToPage:page];
-    }
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
+//
+//    CGFloat pageWidth = scrollView.frame.size.width;
+//    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+//
+//    if (page != self.selectedPageIndex) {
+//        [self scrollToPage:page];
+//    }
+//}
 
 #pragma mark - Observer
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
