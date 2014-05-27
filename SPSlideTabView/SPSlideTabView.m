@@ -71,7 +71,7 @@
     [self.scrollView setClipsToBounds:YES];
     [self addSubview:self.scrollView];
     
-    //[self.scrollView setDelegate:self];
+    [self.scrollView setDelegate:self];
     [self.scrollView addObserver:self forKeyPath:@"contentOffset" options:0 context:KVO_CONTEXT_SCROLL_CONTENT_OFFSET];
     
 }
@@ -119,16 +119,21 @@
     [UIView animateWithDuration:seconds animations:^(void) {
         [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
     }completion:^(BOOL finished) {
+        
         [self.tabBar setSelectedIndex:page];
-        [self setSelectedPageIndex:page];
         
         if (self.pageViewContainerPanels.count > page) {
             UIView *containerPanel = [self.pageViewContainerPanels objectAtIndex:page];
             [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, containerPanel.frame.size.height)];
         }
         
-        if (self.delegate) {
-            [self.delegate slideTabView:self didScrollToPageIndex:page];
+        if (self.selectedPageIndex != page) {
+            
+            [self setSelectedPageIndex:page];
+            
+            if (self.delegate) {
+                [self.delegate slideTabView:self didScrollToPageIndex:self.selectedPageIndex];
+            }
         }
     }];
 }
@@ -221,15 +226,15 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
-//
-//    CGFloat pageWidth = scrollView.frame.size.width;
-//    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-//
-//    if (page != self.selectedPageIndex) {
-//        [self scrollToPage:page];
-//    }
-//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
+
+    CGFloat pageWidth = scrollView.frame.size.width;
+    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+
+    if (page != self.selectedPageIndex) {
+        [self scrollToPage:page];
+    }
+}
 
 #pragma mark - Observer
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
