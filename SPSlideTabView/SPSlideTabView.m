@@ -69,6 +69,7 @@
     [self.scrollView setAlwaysBounceHorizontal:NO];
     [self.scrollView setPagingEnabled:YES];
     [self.scrollView setClipsToBounds:YES];
+    [self.scrollView setContentSize:self.scrollView.bounds.size];
     [self addSubview:self.scrollView];
     
     [self.scrollView setDelegate:self];
@@ -106,7 +107,7 @@
     [containerPanel addSubview:pageView];
     [self.scrollView addSubview:containerPanel];
     
-    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), containerPanel.frame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), self.scrollView.bounds.size.height)];
     
 }
 
@@ -114,10 +115,7 @@
     
     [self.tabBar setSelectedIndex:self.selectedPageIndex];
     
-    if (self.pageViewContainerPanels.count > self.selectedPageIndex) {
-        UIView *containerPanel = [self.pageViewContainerPanels objectAtIndex:self.selectedPageIndex];
-        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, containerPanel.frame.size.height)];
-    }
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
     
     [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.selectedPageIndex, 0) animated:NO];
     
@@ -137,11 +135,8 @@
     }completion:^(BOOL finished) {
         
         [self.tabBar setSelectedIndex:page];
-        
-        if (self.pageViewContainerPanels.count > page) {
-            UIView *containerPanel = [self.pageViewContainerPanels objectAtIndex:page];
-            [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, containerPanel.frame.size.height)];
-        }
+
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
         
         if (self.selectedPageIndex != page) {
             

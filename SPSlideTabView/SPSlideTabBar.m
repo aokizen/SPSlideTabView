@@ -140,7 +140,10 @@
     [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
     button.titleLabel.font = [self barButtonTitleFont];
     
-    //if (button.frame.size.width < [self barButtonMinWidth])
+    if (button.frame.size.width < [self barButtonMinWidth]) {
+        [button setMinWidth:self.barButtonMinWidth];
+        [button fitSize];
+    }
     
     if ([self barButtons].count > 0) {
         
