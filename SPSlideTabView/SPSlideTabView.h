@@ -25,6 +25,7 @@
 
 
 - (void)addPageView:(UIView *)pageView ForTitle:(NSString *)title;
+- (void)setNeedsRender;
 
 #pragma mark - style
 - (void)setTabBarHeight:(CGFloat)height;
@@ -41,6 +42,7 @@
 @end
 
 @protocol SPSlideTabViewDelegate <NSObject>
+
 
 - (void)slideTabView:(SPSlideTabView *)slideTabView didScrollToPageIndex:(NSInteger)pageIndex;
 

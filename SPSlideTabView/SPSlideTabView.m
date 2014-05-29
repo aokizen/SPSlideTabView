@@ -110,7 +110,23 @@
     
 }
 
-#pragma mark - private
+- (void)setNeedsRender {
+    
+    [self.tabBar setSelectedIndex:self.selectedPageIndex];
+    
+    if (self.pageViewContainerPanels.count > self.selectedPageIndex) {
+        UIView *containerPanel = [self.pageViewContainerPanels objectAtIndex:self.selectedPageIndex];
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, containerPanel.frame.size.height)];
+    }
+    
+    [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.selectedPageIndex, 0) animated:NO];
+    
+    if (self.delegate) {
+        [self.delegate slideTabView:self didScrollToPageIndex:self.selectedPageIndex];
+    }
+}
+
+#pragma mark - Private
 - (void)scrollToPage:(NSUInteger)page {
     
     CGFloat targetOffsetX = self.frame.size.width * page;
