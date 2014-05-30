@@ -48,6 +48,8 @@
 
 - (void)commonInit {
     
+    [self setBackgroundColor:[UIColor clearColor]];
+    
     self.buttons = [NSMutableArray array];
     self.lineViews = [NSMutableArray array];
 
@@ -62,7 +64,6 @@
 - (void)reset {
     
     [self setContentInset:UIEdgeInsetsZero];
-    [self setBackgroundColor:[UIColor clearColor]];
     [self setShowsHorizontalScrollIndicator:NO];
     [self setShowsVerticalScrollIndicator:NO];
     
