@@ -77,6 +77,13 @@
     
 }
 
+#pragma mark - override
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
+}
+
 #pragma mark - public
 - (void)addPageView:(UIView *)pageView ForTitle:(NSString *)title {
     [self.tabBar addTabForTitle:title];
