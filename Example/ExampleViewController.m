@@ -10,7 +10,9 @@
 
 #import "SPSlideTabView.h"
 
-@interface ExampleViewController ()
+@interface ExampleViewController () {
+    BOOL isFirstLoading;
+}
 
 @property (strong, nonatomic) IBOutlet SPSlideTabView *slideTabView;
 
@@ -31,10 +33,53 @@
 {
     [super viewDidLoad];
     
+    isFirstLoading = YES;
+    
     if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
        // self.automaticallyAdjustsScrollViewInsets = NO;
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
+    if (isFirstLoading) {
+        [self customSlideTabView];
+        [self addPages];
+        
+        [self.slideTabView setSelectedPageIndex:0];
+        [self.slideTabView setNeedsRender];
+    }
+    
+    isFirstLoading = NO;
+}
+
+- (void)customSlideTabView {
+    
+    [self.slideTabView setBackgroundColor:[UIColor clearColor]];
+    
+    [self.slideTabView setTabBarHeight:40];
+    [self.slideTabView setTabBarBackgroundColor:[UIColor lightGrayColor]];
+    
+    [self.slideTabView setSelectedViewColor:[UIColor whiteColor]];
+    
+    /**
+     * custom the selectedView's width 
+     * (fit to the text of the selected button or equals to the width of the selected button)
+     */
+    [self.slideTabView setSelectedViewSizeToFit:YES];
+    
+    [self.slideTabView setSeparatorStyle:SPSlideTabBarSeparatorStyleSingleLine];
+    [self.slideTabView setSeparatorLineInsetTop:8];
+    [self.slideTabView setSeparatorColor:[UIColor darkGrayColor]];
+    
+    [self.slideTabView setBarButtonMinWidth:self.view.frame.size.width / 6];
+    [self.slideTabView setBarButtonTitleColor:[UIColor blackColor]];
+    [self.slideTabView setBarButtonTitleFont:[UIFont systemFontOfSize:15]];
+}
+
+
+- (void)addPages {
     UIView *first = [[UIView alloc] initWithFrame:CGRectZero];
     [first setBackgroundColor:[UIColor yellowColor]];
     
@@ -56,24 +101,6 @@
     [self.slideTabView addPageView:third ForTitle:@"Three"];
     [self.slideTabView addPageView:fifth ForTitle:@"this is a long title"];
     [self.slideTabView addPageView:fourth ForTitle:@"Four"];
-    
-    
-    
-    //[self.slideTabView addPageForTitle:@"other title"];
-    
-    
-    [self.slideTabView setSelectedPageIndex:0];
-    
-    [self.slideTabView.tabBar setSeparatorLineInsetTop:8];
-    [self.slideTabView.tabBar setSeparatorColor:[UIColor cyanColor]];
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    NSLog(@"%@", self.slideTabView);
-    
-    [self.slideTabView.tabBar setBarButtonMinWidth:80];
 }
 
 

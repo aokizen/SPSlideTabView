@@ -29,6 +29,14 @@
 
 #pragma mark - style
 - (void)setTabBarHeight:(CGFloat)height;
+
+/**
+ * if fit is YES, 
+ * the selectedView's width will fit to the text of the selected button
+ * if fit is NO, 
+ * the selectedView's width will equal to the width of the selected button
+ * the default value is NO
+ */
 - (void)setSelectedViewSizeToFit:(BOOL)fit;
 - (void)setSelectedViewColor:(UIColor *)selectedViewColor;
 - (void)setBarButtonMinWidth:(CGFloat)barButtonMinWidth;
