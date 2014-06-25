@@ -119,8 +119,7 @@
     }
     
     [self setContentSize:CGSizeMake(originX, self.frame.size.height)];
-    
-    [self fixSelectedView];
+
 }
 
 #pragma mark - Action
@@ -140,6 +139,7 @@
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
     [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
     button.titleLabel.font = [self barButtonTitleFont];
+    [button fitSize];
     
     if (button.frame.size.width < [self barButtonMinWidth]) {
         [button setMinWidth:self.barButtonMinWidth];
@@ -198,7 +198,11 @@
         frame.origin.y = self.frame.size.height - frame.size.height;
         frame.origin.x = originFrame.origin.x + (targetFrame.origin.x - originFrame.origin.x) * fabs(percentage);
         frame.size.width = originFrame.size.width + (targetFrame.size.width - originFrame.size.width) * fabs(percentage);
-        self.selectedView.frame = frame;
+        
+        if ((frame.origin.x - self.selectedView.frame.origin.x) * (targetFrame.origin.x - originFrame.origin.x) > 0) { // 往同一方向滑动
+            self.selectedView.frame = frame;
+ 
+        }
 
     }
 }
@@ -382,10 +386,13 @@
     _barButtonTitleFont = barButtonTitleFont;
     
     if ([self barButtons].count) {
-        [[self barButtons] enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-            SPSlideTabButton *button = (SPSlideTabButton *)obj;
+        
+        for (int i = 0; i < [self barButtons].count; i++){
+            SPSlideTabButton *button = [[self barButtons] objectAtIndex:i];
             button.titleLabel.font = [self barButtonTitleFont];
-        }];
+        }
+        
+        [self setNeedsLayout];
     }
 }
 

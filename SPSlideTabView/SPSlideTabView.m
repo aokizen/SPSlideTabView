@@ -12,7 +12,9 @@
 
 #define KVO_CONTEXT_SCROLL_CONTENT_OFFSET @"KVO_CONTEXT_SCROLL_CONTENT_OFFSET"
 
+#define iPad UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
 #define kSlideVelocity 2000.0
+#define kSlideMaxSeconds (iPad ? 0.35 : 0.25)
 
 @interface SPSlideTabView () <UIScrollViewDelegate, SPSlideTabBarDelegate> {
     CGPoint _locationBeforePan;
@@ -77,6 +79,10 @@
     
 }
 
+- (void)layoutSubviews {
+    
+}
+
 #pragma mark - override
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
@@ -126,6 +132,8 @@
     
     [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.selectedPageIndex, 0) animated:NO];
     
+    [self.tabBar setSelectedIndex:self.selectedPageIndex];
+    
     if (self.delegate) {
         [self.delegate slideTabView:self didScrollToPageIndex:self.selectedPageIndex];
     }
@@ -137,6 +145,10 @@
     CGFloat targetOffsetX = self.frame.size.width * page;
     float seconds = fabs(targetOffsetX - self.scrollView.contentOffset.x) / kSlideVelocity;
     
+    if (seconds > kSlideMaxSeconds) {
+        seconds = kSlideMaxSeconds;
+    }
+
     [UIView animateWithDuration:seconds animations:^(void) {
         [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * page, 0) animated:NO];
     }completion:^(BOOL finished) {
