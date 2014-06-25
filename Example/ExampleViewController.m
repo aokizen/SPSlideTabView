@@ -10,7 +10,7 @@
 
 #import "SPSlideTabView.h"
 
-@interface ExampleViewController () {
+@interface ExampleViewController () <SPSlideTabViewDelegate> {
     BOOL isFirstLoading;
 }
 
@@ -76,6 +76,8 @@
     [self.slideTabView setBarButtonMinWidth:self.view.frame.size.width / 6];
     [self.slideTabView setBarButtonTitleColor:[UIColor blackColor]];
     [self.slideTabView setBarButtonTitleFont:[UIFont systemFontOfSize:15]];
+    
+    [self.slideTabView setDelegate:self];
 }
 
 
@@ -101,6 +103,15 @@
     [self.slideTabView addPageView:third ForTitle:@"Three"];
     [self.slideTabView addPageView:fifth ForTitle:@"this is a long title"];
     [self.slideTabView addPageView:fourth ForTitle:@"Four"];
+}
+
+#pragma mark - SPSlideTabViewDelegate
+- (void)slideTabView:(SPSlideTabView *)slideTabView didScrollToPageIndex:(NSInteger)pageIndex {
+    switch (pageIndex) {
+
+        default:
+            break;
+    }
 }
 
 
