@@ -63,7 +63,7 @@
 
 - (void)reset {
     
-    [self setContentInset:UIEdgeInsetsZero];
+    [self setContentInset:UIEdgeInsetsMake(0, self.contentInset.left, self.contentInset.bottom, self.contentInset.right)];
     [self setShowsHorizontalScrollIndicator:NO];
     [self setShowsVerticalScrollIndicator:NO];
     
