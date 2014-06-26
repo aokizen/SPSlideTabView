@@ -79,10 +79,6 @@
     
 }
 
-- (void)layoutSubviews {
-    
-}
-
 #pragma mark - override
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
