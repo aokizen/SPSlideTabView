@@ -200,10 +200,10 @@
         frame.origin.x = originFrame.origin.x + (targetFrame.origin.x - originFrame.origin.x) * fabs(percentage);
         frame.size.width = originFrame.size.width + (targetFrame.size.width - originFrame.size.width) * fabs(percentage);
         
-        if ((frame.origin.x - self.selectedView.frame.origin.x) * (targetFrame.origin.x - originFrame.origin.x) > 0) { // 往同一方向滑动
+        //if ((frame.origin.x - self.selectedView.frame.origin.x) * (targetFrame.origin.x - originFrame.origin.x) > 0) { // 往同一方向滑动
             self.selectedView.frame = frame;
  
-        }
+        //}
 
     }
 }
