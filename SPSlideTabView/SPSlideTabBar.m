@@ -139,13 +139,12 @@
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
     [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
     button.titleLabel.font = [self barButtonTitleFont];
-    [button setMinWidth:self.barButtonMinWidth];
     [button fitSize];
     
-//    if (button.frame.size.width < [self barButtonMinWidth]) {
-//        [button setMinWidth:self.barButtonMinWidth];
-//        [button fitSize];
-//    }
+    if (button.frame.size.width < [self barButtonMinWidth]) {
+        [button setMinWidth:self.barButtonMinWidth];
+        [button fitSize];
+    }
     
     if ([self barButtons].count > 0) {
         
@@ -166,6 +165,18 @@
     [self setContentSize:CGSizeMake(CGRectGetMaxX(button.frame), self.frame.size.height)];
     
     [self setNeedsDisplay];
+}
+
+- (void)removeAllTabs {
+    for (UIView *button in self.buttons) {
+        [button removeFromSuperview];
+    }
+    [self.buttons removeAllObjects];
+    
+    for (UIView *line in self.lineViews) {
+        [line removeFromSuperview];
+    }
+    [self.lineViews removeAllObjects];
 }
 
 - (void)setScrollOffsetPercentage:(CGFloat)percentage {

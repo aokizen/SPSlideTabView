@@ -124,6 +124,15 @@
     
 }
 
+- (void)removeAllPageViews {
+    for (UIView *panels in self.pageViewContainerPanels) {
+        [panels removeFromSuperview];
+    }
+    self.pageViewContainerPanels = nil;
+    
+    [self.tabBar removeAllTabs];
+}
+
 - (void)setNeedsRender {
     
     [self.tabBar setSelectedIndex:self.selectedPageIndex];
