@@ -139,12 +139,8 @@
     SPSlideTabButton *button = [[SPSlideTabButton alloc] initWithTitle:title WithHeight:self.frame.size.height];
     [button setTitleColor:[self barButtonTitleColor] forState:UIControlStateNormal];
     button.titleLabel.font = [self barButtonTitleFont];
+    [button setMinWidth:self.barButtonMinWidth];
     [button fitSize];
-    
-    if (button.frame.size.width < [self barButtonMinWidth]) {
-        [button setMinWidth:self.barButtonMinWidth];
-        [button fitSize];
-    }
     
     if ([self barButtons].count > 0) {
         
