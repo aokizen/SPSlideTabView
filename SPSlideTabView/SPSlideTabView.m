@@ -261,11 +261,21 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
+//
+//    CGFloat pageWidth = scrollView.frame.size.width;
+//    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+//
+//    if (page != self.selectedPageIndex) {
+//        [self scrollToPage:page];
+//    }
+//}
 
-    CGFloat pageWidth = scrollView.frame.size.width;
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+	CGFloat pageWidth = scrollView.frame.size.width;
     int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-
+    
     if (page != self.selectedPageIndex) {
         [self scrollToPage:page];
     }
