@@ -326,6 +326,9 @@
     _barButtonMinWidth = barButtonMinWidth;
     
     [self setNeedsLayout];
+    [self layoutIfNeeded];
+    
+    [self fixSelectedView];
 }
 
 

@@ -79,6 +79,20 @@
     
 }
 
+#pragma mark - layout
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    for (int i = 0; i < self.pageViewContainerPanels.count; i ++) {
+        UIView *panel = [self.pageViewContainerPanels objectAtIndex:i];
+        [panel setFrame:CGRectMake(self.frame.size.width * i, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
+    }
+    
+    if (self.pageViewContainerPanels.count > 0) {
+        [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(((UIView *)self.pageViewContainerPanels.lastObject).frame), self.scrollView.bounds.size.height)];
+    }
+}
+
 #pragma mark - override
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
