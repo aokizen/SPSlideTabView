@@ -328,6 +328,8 @@
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
+    [self setNeedsDisplay];
+    
     [self fixSelectedView];
 }
 
