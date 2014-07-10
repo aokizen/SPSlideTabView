@@ -89,15 +89,16 @@
     }
     
     if (self.pageViewContainerPanels.count > 0) {
-        [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(((UIView *)self.pageViewContainerPanels.lastObject).frame), self.scrollView.bounds.size.height)];
+        [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(((UIView *)self.pageViewContainerPanels.lastObject).frame), self.scrollView.frame.size.height)];
     }
-}
+    
+    [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.selectedPageIndex, 0) animated:NO];}
 
 #pragma mark - override
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.frame.size.height)];
 }
 
 #pragma mark - public
@@ -130,7 +131,7 @@
     [containerPanel addSubview:pageView];
     [self.scrollView addSubview:containerPanel];
     
-    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), self.scrollView.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetMaxX(containerPanel.frame), self.scrollView.frame.size.height)];
     
 }
 
@@ -147,7 +148,7 @@
     
     [self.tabBar setSelectedIndex:self.selectedPageIndex];
     
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.frame.size.height)];
     
     [self.scrollView setContentOffset:CGPointMake(self.frame.size.width * self.selectedPageIndex, 0) animated:NO];
     
@@ -174,7 +175,7 @@
         
         [self.tabBar setSelectedIndex:page];
 
-        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.bounds.size.height)];
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, self.scrollView.frame.size.height)];
         
         if (self.selectedPageIndex != page) {
             
